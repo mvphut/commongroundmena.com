@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://mvphut.github.io/commongroundmena.com/sitemap.xml
