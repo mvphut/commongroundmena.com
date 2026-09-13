@@ -7,6 +7,7 @@ const PAPER = "#f7f0da";
 const ACCENT = "#9cbb92";
 const SITE_URL = "https://commongroundmena.com";
 const LOGO_URL = `${SITE_URL}/icon-512.png`;
+const MAPS_URL = "https://maps.app.goo.gl/otQvsgbVZnN6SUjN9";
 
 function escapeHtml(str) {
   return String(str).replace(/[&<>"']/g, (c) => ({
@@ -151,7 +152,7 @@ export function renderApplyAcceptedEmail({ fullName, preferredSlot, venue }) {
     <table role="presentation" cellpadding="0" cellspacing="0" style="width:100%; margin: 8px 0 16px; border-collapse:collapse;">
       <tr><td style="padding:6px 0; color:#6b6255; width:110px; vertical-align:top;">Date</td><td style="padding:6px 0; font-weight:bold;">Wednesday, September 16</td></tr>
       <tr><td style="padding:6px 0; color:#6b6255; vertical-align:top;">Time</td><td style="padding:6px 0; font-weight:bold;">${escapeHtml(preferredSlot)}</td></tr>
-      <tr><td style="padding:6px 0; color:#6b6255; vertical-align:top;">Venue</td><td style="padding:6px 0; font-weight:bold;">${escapeHtml(venue)}</td></tr>
+      <tr><td style="padding:6px 0; color:#6b6255; vertical-align:top;">Venue</td><td style="padding:6px 0; font-weight:bold;">${escapeHtml(venue)}<br><a href="${MAPS_URL}" style="color:#5a7a54; font-size:13px; font-weight:normal;">Get directions ↗</a></td></tr>
       <tr><td style="padding:6px 0; color:#6b6255; vertical-align:top;">Speaker</td><td style="padding:6px 0; font-weight:bold;">Hossam Shafick, Partner at Silicon Badia</td></tr>
     </table>
     <p style="margin:0 0 4px;">Please arrive 10 minutes early. If your slot no longer works for you, reply as soon as possible so we can offer it to someone else.</p>
@@ -173,6 +174,7 @@ export function renderApplyAcceptedEmail({ fullName, preferredSlot, venue }) {
     "Date: Wednesday, September 16",
     `Time: ${preferredSlot}`,
     `Venue: ${venue}`,
+    `Get directions: ${MAPS_URL}`,
     "Speaker: Hossam Shafick, Partner at Silicon Badia",
     "",
     "Please arrive 10 minutes early. If your slot no longer works for you, reply as soon as possible so we can offer it to someone else.",
