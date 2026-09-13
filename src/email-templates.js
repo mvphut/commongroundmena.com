@@ -8,6 +8,8 @@ const ACCENT = "#9cbb92";
 const SITE_URL = "https://commongroundmena.com";
 const LOGO_URL = `${SITE_URL}/icon-512.png`;
 const MAPS_URL = "https://maps.app.goo.gl/otQvsgbVZnN6SUjN9";
+const SPONSOR_MINT_URL = `${SITE_URL}/sponsor-mint-egbank.png`;
+const SPONSOR_BADIA_URL = `${SITE_URL}/sponsor-silicon-badia.png`;
 
 function escapeHtml(str) {
   return String(str).replace(/[&<>"']/g, (c) => ({
@@ -17,6 +19,31 @@ function escapeHtml(str) {
     '"': "&quot;",
     "'": "&#39;",
   }[c]));
+}
+
+function sponsorsBlock() {
+  return `
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin: 22px 0 6px;">
+      <tr>
+        <td align="center">
+          <p style="margin:0 0 10px; font-family: Helvetica, Arial, sans-serif; font-size:11px; letter-spacing:0.14em; text-transform:uppercase; color:#a39a8b;">Sponsors</p>
+          <table role="presentation" cellpadding="0" cellspacing="0" style="background-color:${PAPER}; border-radius:14px;">
+            <tr>
+              <td style="padding: 16px 20px 16px 24px;" valign="middle">
+                <img src="${SPONSOR_MINT_URL}" alt="MINT by EGBANK" height="34" style="display:block; height:34px; width:auto; border:0;">
+              </td>
+              <td style="padding:0 16px;" valign="middle">
+                <div style="width:1px; height:28px; background-color:rgba(11,54,48,0.14); font-size:0; line-height:0;">&nbsp;</div>
+              </td>
+              <td style="padding: 16px 24px 16px 0;" valign="middle">
+                <img src="${SPONSOR_BADIA_URL}" alt="Silicon Badia" height="44" style="display:block; height:44px; width:auto; border:0;">
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  `;
 }
 
 function emailShell({ preheader, viewInBrowserUrl, bodyHtml }) {
@@ -65,8 +92,6 @@ function emailShell({ preheader, viewInBrowserUrl, bodyHtml }) {
         <table role="presentation" width="100%" style="max-width:560px;" cellpadding="0" cellspacing="0">
           <tr>
             <td align="center" style="padding: 20px 16px 8px; font-family: Helvetica, Arial, sans-serif; font-size:12px; color:#6b6255;">
-              <a href="mailto:hello@commongroundmena.com" style="color:#6b6255; text-decoration:underline;">hello@commongroundmena.com</a>
-              &nbsp;·&nbsp;
               <a href="${SITE_URL}" style="color:#6b6255; text-decoration:underline;">commongroundmena.com</a>
               &nbsp;·&nbsp;
               <a href="${SITE_URL}/privacy" style="color:#6b6255; text-decoration:underline;">Privacy</a>
@@ -115,10 +140,11 @@ export function renderApplyReceivedEmail({ fullName }) {
   const bodyHtml = `
     <p style="margin:0 0 16px; font-size:18px; font-weight:bold;">We got your application.</p>
     <p style="margin:0 0 16px;">${greeting}</p>
-    <p style="margin:0 0 16px;">Thanks for applying to <strong>VC Psychology Explained</strong>, hosted by Common Ground x Silicon Badia.</p>
+    <p style="margin:0 0 16px;">Thanks for applying to <strong>VC Psychology Explained</strong>, hosted by Common Ground x #WTFtv.</p>
     <p style="margin:0 0 16px;">This confirms we've received your application — it does not yet confirm your spot. Slots are limited, and we're reviewing applications on a rolling basis.</p>
     <p style="margin:0 0 16px;">We'll follow up shortly with your status and, if confirmed, your exact slot and venue details.</p>
-    <p style="margin:24px 0 0; color:#6b6255;">Thank you for your patience,<br>Common Ground x Silicon Badia</p>
+    ${sponsorsBlock()}
+    <p style="margin:12px 0 0; color:#6b6255;">Thank you for your patience,<br>Common Ground x #WTFtv</p>
   `;
   const html = emailShell({
     preheader: "Your application to VC Psychology Explained has been received.",
@@ -130,14 +156,16 @@ export function renderApplyReceivedEmail({ fullName }) {
     "",
     greetingText,
     "",
-    "Thanks for applying to VC Psychology Explained, hosted by Common Ground x Silicon Badia.",
+    "Thanks for applying to VC Psychology Explained, hosted by Common Ground x #WTFtv.",
     "",
     "This confirms we've received your application — it does not yet confirm your spot. Slots are limited, and we're reviewing applications on a rolling basis.",
     "",
     "We'll follow up shortly with your status and, if confirmed, your exact slot and venue details.",
     "",
+    "Sponsors: MINT by EGBANK",
+    "",
     "Thank you for your patience,",
-    "Common Ground x Silicon Badia",
+    "Common Ground x #WTFtv",
   ].join("\n");
   return { subject: "We got your application — VC Psychology Explained", html, text };
 }
@@ -148,16 +176,17 @@ export function renderApplyAcceptedEmail({ fullName, preferredSlot, venue }) {
   const bodyHtml = `
     <p style="margin:0 0 16px; font-size:18px; font-weight:bold;">You're confirmed.</p>
     <p style="margin:0 0 16px;">${greeting}</p>
-    <p style="margin:0 0 16px;">Good news — you're confirmed for <strong>VC Psychology Explained</strong>, hosted by Common Ground x Silicon Badia.</p>
+    <p style="margin:0 0 16px;">Good news — you're confirmed for <strong>VC Psychology Explained</strong>, hosted by Common Ground x #WTFtv.</p>
     <table role="presentation" cellpadding="0" cellspacing="0" style="width:100%; margin: 8px 0 16px; border-collapse:collapse;">
       <tr><td style="padding:6px 0; color:#6b6255; width:110px; vertical-align:top;">Date</td><td style="padding:6px 0; font-weight:bold;">Wednesday, September 16</td></tr>
       <tr><td style="padding:6px 0; color:#6b6255; vertical-align:top;">Time</td><td style="padding:6px 0; font-weight:bold;">${escapeHtml(preferredSlot)}</td></tr>
       <tr><td style="padding:6px 0; color:#6b6255; vertical-align:top;">Venue</td><td style="padding:6px 0; font-weight:bold;">${escapeHtml(venue)}<br><a href="${MAPS_URL}" style="color:#5a7a54; font-size:13px; font-weight:normal;">Get directions ↗</a></td></tr>
-      <tr><td style="padding:6px 0; color:#6b6255; vertical-align:top;">Speaker</td><td style="padding:6px 0; font-weight:bold;">Hossam Shafick, Partner at Silicon Badia</td></tr>
+      <tr><td style="padding:6px 0; color:#6b6255; vertical-align:top;">Speaker</td><td style="padding:6px 0; font-weight:bold;">Hossam Shafick</td></tr>
     </table>
     <p style="margin:0 0 4px;">Please arrive 10 minutes early. If your slot no longer works for you, reply as soon as possible so we can offer it to someone else.</p>
     ${button(`${SITE_URL}/vc-psychology`, "View event details")}
-    <p style="margin:24px 0 0; color:#6b6255;">See you there,<br>Common Ground x Silicon Badia</p>
+    ${sponsorsBlock()}
+    <p style="margin:12px 0 0; color:#6b6255;">See you there,<br>Common Ground x #WTFtv</p>
   `;
   const html = emailShell({
     preheader: "You're confirmed for VC Psychology Explained on September 16.",
@@ -169,18 +198,20 @@ export function renderApplyAcceptedEmail({ fullName, preferredSlot, venue }) {
     "",
     greetingText,
     "",
-    "Good news — you're confirmed for VC Psychology Explained, hosted by Common Ground x Silicon Badia.",
+    "Good news — you're confirmed for VC Psychology Explained, hosted by Common Ground x #WTFtv.",
     "",
     "Date: Wednesday, September 16",
     `Time: ${preferredSlot}`,
     `Venue: ${venue}`,
     `Get directions: ${MAPS_URL}`,
-    "Speaker: Hossam Shafick, Partner at Silicon Badia",
+    "Speaker: Hossam Shafick",
     "",
     "Please arrive 10 minutes early. If your slot no longer works for you, reply as soon as possible so we can offer it to someone else.",
     "",
+    "Sponsors: MINT by EGBANK",
+    "",
     "See you there,",
-    "Common Ground x Silicon Badia",
+    "Common Ground x #WTFtv",
   ].join("\n");
   return { subject: "You're confirmed — VC Psychology Explained, Sept 16", html, text };
 }

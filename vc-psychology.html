@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>VC Psychology Explained | Common Ground</title>
-<meta name="description" content="VC psychology explained, and how to use that to your advantage. With Hossam Shafick, Partner at Silicon Badia. A Common Ground × #WTFtv workshop, powered by The Startup Kitchen — Sheikh Zayed, September 16.">
+<meta name="description" content="VC psychology explained, and how to use that to your advantage. With Hossam Shafick. A Common Ground × #WTFtv workshop, powered by The Startup Kitchen — Sheikh Zayed, September 16.">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://commongroundmena.com/vc-psychology">
 <link rel="icon" href="/favicon.ico" sizes="any">
@@ -15,14 +15,14 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Common Ground">
 <meta property="og:title" content="VC Psychology Explained — Common Ground × #WTFtv">
-<meta property="og:description" content="And how to use that to your advantage. With Hossam Shafick, Partner at Silicon Badia · The Startup Kitchen, Sheikh Zayed · September 16.">
+<meta property="og:description" content="And how to use that to your advantage. With Hossam Shafick · The Startup Kitchen, Sheikh Zayed · September 16.">
 <meta property="og:url" content="https://commongroundmena.com/vc-psychology">
 <meta property="og:image" content="https://commongroundmena.com/og-image.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="VC Psychology Explained — Common Ground × #WTFtv">
-<meta name="twitter:description" content="And how to use that to your advantage. With Hossam Shafick, Partner at Silicon Badia · The Startup Kitchen, Sheikh Zayed · September 16.">
+<meta name="twitter:description" content="And how to use that to your advantage. With Hossam Shafick · The Startup Kitchen, Sheikh Zayed · September 16.">
 <meta name="twitter:image" content="https://commongroundmena.com/og-image.png">
 
 <style>
@@ -341,7 +341,28 @@
     gap: 6px;
   }
   footer .brands { font-size: 13.5px; color: var(--paper-dim); }
+  footer .sponsors { margin: 6px 0 2px; }
+  footer .sponsors-label { font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--paper-faint); margin: 0 0 12px; }
+  footer .sponsors-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 22px;
+    background: var(--paper);
+    border-radius: 14px;
+    padding: 16px 28px;
+    width: fit-content;
+    margin: 0 auto;
+  }
+  footer .sponsor-logo { height: 40px; width: auto; display: block; }
+  footer .sponsor-logo--badia { height: 52px; }
+  footer .sponsor-divider { width: 1px; height: 32px; background: rgba(11, 54, 48, 0.14); }
   footer .powered { font-size: 12px; color: var(--paper-faint); }
+  @media (max-width: 560px) {
+    footer .sponsors-row { gap: 16px; padding: 14px 20px; flex-wrap: wrap; }
+    footer .sponsor-logo { height: 32px; }
+    footer .sponsor-logo--badia { height: 42px; }
+  }
   footer a.back { margin-top: 14px; font-size: 12.5px; color: var(--paper-faint); text-decoration: none; border-bottom: 1px solid var(--line); padding-bottom: 2px; display: inline-block; align-self: center; }
   footer a.back:hover { color: var(--paper); border-color: var(--accent); }
 </style>
@@ -357,7 +378,7 @@
   <p class="eyebrow">Common Ground × #WTFtv</p>
   <h1>VC Psychology Explained</h1>
   <p class="subhead">And how to use that to your advantage.</p>
-  <p class="byline">By <strong>Hossam Shafick</strong> — Partner, Silicon Badia</p>
+  <p class="byline">By <strong>Hossam Shafick</strong></p>
 
   <div class="details">
     <div class="cell">
@@ -469,6 +490,14 @@
 
 <footer>
   <p class="brands">Common Ground × #WTFtv</p>
+  <div class="sponsors">
+    <p class="sponsors-label">Sponsors</p>
+    <div class="sponsors-row">
+      <img class="sponsor-logo" src="/sponsor-mint-egbank.png" alt="MINT by EGBANK">
+      <span class="sponsor-divider" aria-hidden="true"></span>
+      <img class="sponsor-logo sponsor-logo--badia" src="/sponsor-silicon-badia.png" alt="Silicon Badia">
+    </div>
+  </div>
   <p class="powered">Powered by The Startup Kitchen</p>
   <a class="back" href="/">← Back to Common Ground</a>
 </footer>
