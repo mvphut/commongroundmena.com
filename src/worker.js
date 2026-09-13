@@ -268,9 +268,6 @@ export default {
     const method = request.method;
 
     try {
-      if (pathname === "/api/debug-env" && method === "GET") {
-        return json({ hasResendKey: !!env.RESEND_API_KEY, keyLength: env.RESEND_API_KEY ? env.RESEND_API_KEY.length : 0 });
-      }
       if (pathname === "/api/subscribe" && method === "POST") return await handleSubscribe(request, env, ctx);
       if (pathname === "/api/apply" && method === "POST") return await handleApply(request, env, ctx);
       if (pathname === "/api/login" && method === "POST") return await handleLogin(request, env);
