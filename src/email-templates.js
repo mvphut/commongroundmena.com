@@ -101,7 +101,7 @@ export function renderSubscribeEmail() {
   `;
   const html = emailShell({
     preheader: "Thanks for signing up — we'll email you when Common Ground launches.",
-    viewInBrowserUrl: `${SITE_URL}/email/signup.html`,
+    viewInBrowserUrl: `${SITE_URL}/email/signup`,
     bodyHtml,
   });
   const text = "You're on the list.\n\nThanks for signing up — we'll email you the moment Common Ground launches.\n\n— Common Ground";
@@ -121,7 +121,7 @@ export function renderApplyReceivedEmail({ fullName }) {
   `;
   const html = emailShell({
     preheader: "Your application to VC Psychology Explained has been received.",
-    viewInBrowserUrl: `${SITE_URL}/email/application-received.html`,
+    viewInBrowserUrl: `${SITE_URL}/email/application-received`,
     bodyHtml,
   });
   const text = [
@@ -160,7 +160,7 @@ export function renderApplyAcceptedEmail({ fullName, preferredSlot, venue }) {
   `;
   const html = emailShell({
     preheader: "You're confirmed for VC Psychology Explained on September 16.",
-    viewInBrowserUrl: `${SITE_URL}/email/application-confirmed.html`,
+    viewInBrowserUrl: `${SITE_URL}/email/application-confirmed`,
     bodyHtml,
   });
   const text = [
