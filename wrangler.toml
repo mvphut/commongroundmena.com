@@ -1,0 +1,6 @@
+pages_build_output_dir = "."
+
+[[d1_databases]]
+binding = "DB"
+database_name = "commonground"
+database_id = "6f6fd806-6ae5-4805-a576-69933c515185"

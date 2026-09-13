@@ -393,8 +393,6 @@
   <h1>Something new is taking shape. Common Ground is launching soon.</h1>
 
   <form class="signup" id="signup-form">
-    <input type="hidden" name="access_key" value="a284bf23-f1f2-4d13-a50f-1ff093aa5f14" />
-    <input type="hidden" name="subject" value="New signup — Common Ground coming soon" />
     <input type="checkbox" name="botcheck" style="display:none" tabindex="-1" autocomplete="off" />
     <label for="email" class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);">Email address</label>
     <input id="email" name="email" type="email" placeholder="your@email.com" autocomplete="email" required />
@@ -440,7 +438,7 @@
       status.textContent = 'Sending…';
       status.classList.remove('is-visible');
 
-      fetch('https://api.web3forms.com/submit', {
+      fetch('/api/subscribe', {
         method: 'POST',
         headers: { 'Accept': 'application/json' },
         body: new FormData(form)
@@ -453,7 +451,7 @@
             email.value = '';
             email.disabled = true;
           } else {
-            status.textContent = "Something went wrong — please try again.";
+            status.textContent = data.message || "Something went wrong — please try again.";
             sendBtn.disabled = false;
           }
         })

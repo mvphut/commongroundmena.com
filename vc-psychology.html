@@ -377,9 +377,6 @@
   </div>
 
   <form id="apply-form">
-    <input type="hidden" name="access_key" value="a284bf23-f1f2-4d13-a50f-1ff093aa5f14" />
-    <input type="hidden" name="subject" value="New application — VC Psychology Explained" />
-    <input type="hidden" name="from_name" value="Common Ground — VC Psychology Explained" />
     <input type="checkbox" name="botcheck" style="display:none" tabindex="-1" autocomplete="off" />
 
     <section id="apply">
@@ -494,7 +491,7 @@
       status.textContent = 'Sending…';
       status.className = 'form-status';
 
-      fetch('https://api.web3forms.com/submit', {
+      fetch('/api/apply', {
         method: 'POST',
         headers: { 'Accept': 'application/json' },
         body: new FormData(form)
@@ -507,7 +504,7 @@
             form.reset();
             submitBtn.disabled = true;
           } else {
-            status.textContent = 'Something went wrong — please try again.';
+            status.textContent = data.message || 'Something went wrong — please try again.';
             status.className = 'form-status is-error';
             submitBtn.disabled = false;
           }
