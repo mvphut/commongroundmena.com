@@ -10,6 +10,72 @@ import {
 
 const VALID_STATUSES = ["awaiting_review", "accepted", "waitlist", "declined"];
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const FROM_ADDRESS = "Common Ground <hello@commongroundmena.com>";
+
+function escapeHtml(str) {
+  return String(str).replace(/[&<>"']/g, (c) => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;",
+  }[c]));
+}
+
+async function sendEmail(env, { to, subject, text, html }) {
+  if (!env.RESEND_API_KEY) return;
+  try {
+    await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${env.RESEND_API_KEY}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ from: FROM_ADDRESS, to: [to], subject, text, html }),
+    });
+  } catch (e) {
+    // Best-effort: never let email delivery block or fail the user-facing response.
+  }
+}
+
+function sendSubscribeConfirmation(env, ctx, email) {
+  const text = "Thanks for signing up — we'll email you the moment Common Ground launches.";
+  const html = `<p>Thanks for signing up — we'll email you the moment Common Ground launches.</p><p>— Common Ground</p>`;
+  const promise = sendEmail(env, { to: email, subject: "You're on the list — Common Ground", text, html });
+  if (ctx && ctx.waitUntil) ctx.waitUntil(promise);
+  return promise;
+}
+
+function sendApplyConfirmation(env, ctx, { email, fullName, preferredSlot }) {
+  const greeting = fullName ? `Hi ${escapeHtml(fullName)},` : "Hi,";
+  const text = [
+    greeting,
+    "",
+    "Thanks for applying to VC Psychology Explained — your application has been received.",
+    "",
+    "Date: Wednesday, September 16",
+    "Venue: The Startup Kitchen, Sheikh Zayed",
+    `Your preferred slot: ${preferredSlot}`,
+    "",
+    "The exact location and confirmed time will be shared shortly.",
+    "",
+    "— Common Ground x Silicon Badia",
+  ].join("\n");
+  const html = `
+    <p>${greeting}</p>
+    <p>Thanks for applying to <strong>VC Psychology Explained</strong> — your application has been received.</p>
+    <p>
+      <strong>Date:</strong> Wednesday, September 16<br>
+      <strong>Venue:</strong> The Startup Kitchen, Sheikh Zayed<br>
+      <strong>Your preferred slot:</strong> ${escapeHtml(preferredSlot)}
+    </p>
+    <p>The exact location and confirmed time will be shared shortly.</p>
+    <p>— Common Ground x Silicon Badia</p>
+  `;
+  const promise = sendEmail(env, { to: email, subject: "You're confirmed — VC Psychology Explained", text, html });
+  if (ctx && ctx.waitUntil) ctx.waitUntil(promise);
+  return promise;
+}
 
 async function parseBody(request) {
   const contentType = request.headers.get("Content-Type") || "";
@@ -30,7 +96,7 @@ async function parseBody(request) {
   return body;
 }
 
-async function handleSubscribe(request, env) {
+async function handleSubscribe(request, env, ctx) {
   let body;
   try {
     body = await parseBody(request);
@@ -53,10 +119,12 @@ async function handleSubscribe(request, env) {
     return json({ success: false, message: "Could not save your signup. Please try again." }, { status: 500 });
   }
 
+  sendSubscribeConfirmation(env, ctx, email);
+
   return json({ success: true });
 }
 
-async function handleApply(request, env) {
+async function handleApply(request, env, ctx) {
   let body;
   try {
     body = await parseBody(request);
@@ -99,6 +167,8 @@ async function handleApply(request, env) {
   } catch (e) {
     return json({ success: false, message: "Could not save your application. Please try again." }, { status: 500 });
   }
+
+  sendApplyConfirmation(env, ctx, { email, fullName, preferredSlot });
 
   return json({ success: true });
 }
@@ -206,8 +276,8 @@ export default {
     const method = request.method;
 
     try {
-      if (pathname === "/api/subscribe" && method === "POST") return await handleSubscribe(request, env);
-      if (pathname === "/api/apply" && method === "POST") return await handleApply(request, env);
+      if (pathname === "/api/subscribe" && method === "POST") return await handleSubscribe(request, env, ctx);
+      if (pathname === "/api/apply" && method === "POST") return await handleApply(request, env, ctx);
       if (pathname === "/api/login" && method === "POST") return await handleLogin(request, env);
       if (pathname === "/api/logout" && method === "POST") return await handleLogout(request, env);
       if (pathname === "/api/session" && method === "GET") return await handleSession(request, env);
