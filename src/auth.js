@@ -1,4 +1,4 @@
-// Shared auth helpers for Pages Functions.
+// Shared auth helpers.
 // Password hashing: PBKDF2-SHA256, 100000 iterations, 32-byte derived key, hex-encoded.
 // Sessions: random 32-byte token stored in D1 with an expiry, set as an httpOnly cookie.
 
@@ -53,7 +53,6 @@ export async function verifyCredentials(env, username, password) {
     .first();
   if (!row) return null;
   const computed = await hashPassword(password, row.salt);
-  // constant-time-ish compare
   if (computed.length !== row.password_hash.length) return null;
   let diff = 0;
   for (let i = 0; i < computed.length; i++) {

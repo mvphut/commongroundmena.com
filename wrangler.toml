@@ -1,4 +1,11 @@
-pages_build_output_dir = "."
+name = "commongroundmena-com"
+main = "src/worker.js"
+compatibility_date = "2025-06-05"
+
+[assets]
+directory = "."
+binding = "ASSETS"
+not_found_handling = "404-page"
 
 [[d1_databases]]
 binding = "DB"
