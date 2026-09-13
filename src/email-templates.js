@@ -181,7 +181,7 @@ export function renderApplyAcceptedEmail({ fullName, preferredSlot, venue }) {
       <tr><td style="padding:6px 0; color:#6b6255; width:110px; vertical-align:top;">Date</td><td style="padding:6px 0; font-weight:bold;">Wednesday, September 16</td></tr>
       <tr><td style="padding:6px 0; color:#6b6255; vertical-align:top;">Time</td><td style="padding:6px 0; font-weight:bold;">${escapeHtml(preferredSlot)}</td></tr>
       <tr><td style="padding:6px 0; color:#6b6255; vertical-align:top;">Venue</td><td style="padding:6px 0; font-weight:bold;">${escapeHtml(venue)}<br><a href="${MAPS_URL}" style="color:#5a7a54; font-size:13px; font-weight:normal;">Get directions ↗</a></td></tr>
-      <tr><td style="padding:6px 0; color:#6b6255; vertical-align:top;">Speaker</td><td style="padding:6px 0; font-weight:bold;">Hossam Shafick</td></tr>
+      <tr><td style="padding:6px 0; color:#6b6255; vertical-align:top;">Speaker</td><td style="padding:6px 0; font-weight:bold;">Hossam Shafick<br><span style="font-weight:normal; color:#6b6255; font-size:13px;">Partner - Silicon Badia</span></td></tr>
     </table>
     <p style="margin:0 0 4px;">Please arrive 10 minutes early. If your slot no longer works for you, reply as soon as possible so we can offer it to someone else.</p>
     ${button(`${SITE_URL}/vc-psychology`, "View event details")}
@@ -204,7 +204,7 @@ export function renderApplyAcceptedEmail({ fullName, preferredSlot, venue }) {
     `Time: ${preferredSlot}`,
     `Venue: ${venue}`,
     `Get directions: ${MAPS_URL}`,
-    "Speaker: Hossam Shafick",
+    "Speaker: Hossam Shafick, Partner - Silicon Badia",
     "",
     "Please arrive 10 minutes early. If your slot no longer works for you, reply as soon as possible so we can offer it to someone else.",
     "",
