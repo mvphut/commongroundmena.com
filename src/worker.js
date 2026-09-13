@@ -7,20 +7,16 @@ import {
   requireAuth,
   deleteSession,
 } from "./auth.js";
+import {
+  renderSubscribeEmail,
+  renderApplyReceivedEmail,
+  renderApplyAcceptedEmail,
+} from "./email-templates.js";
 
 const VALID_STATUSES = ["awaiting_review", "accepted", "waitlist", "declined"];
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const FROM_ADDRESS = "Common Ground <hello@commongroundmena.com>";
-
-function escapeHtml(str) {
-  return String(str).replace(/[&<>"']/g, (c) => ({
-    "&": "&amp;",
-    "<": "&lt;",
-    ">": "&gt;",
-    '"': "&quot;",
-    "'": "&#39;",
-  }[c]));
-}
+const EVENT_VENUE = "The Startup Kitchen, Sheikh Zayed";
 
 async function sendEmail(env, { to, subject, text, html }) {
   if (!env.RESEND_API_KEY) return;
@@ -39,40 +35,22 @@ async function sendEmail(env, { to, subject, text, html }) {
 }
 
 function sendSubscribeConfirmation(env, ctx, email) {
-  const text = "Thanks for signing up — we'll email you the moment Common Ground launches.";
-  const html = `<p>Thanks for signing up — we'll email you the moment Common Ground launches.</p><p>— Common Ground</p>`;
-  const promise = sendEmail(env, { to: email, subject: "You're on the list — Common Ground", text, html });
+  const { subject, html, text } = renderSubscribeEmail();
+  const promise = sendEmail(env, { to: email, subject, text, html });
   if (ctx && ctx.waitUntil) ctx.waitUntil(promise);
   return promise;
 }
 
-function sendApplyConfirmation(env, ctx, { email, fullName, preferredSlot }) {
-  const greeting = fullName ? `Hi ${escapeHtml(fullName)},` : "Hi,";
-  const text = [
-    greeting,
-    "",
-    "Thanks for applying to VC Psychology Explained — your application has been received.",
-    "",
-    "Date: Wednesday, September 16",
-    "Venue: The Startup Kitchen, Sheikh Zayed",
-    `Your preferred slot: ${preferredSlot}`,
-    "",
-    "The exact location and confirmed time will be shared shortly.",
-    "",
-    "— Common Ground x Silicon Badia",
-  ].join("\n");
-  const html = `
-    <p>${greeting}</p>
-    <p>Thanks for applying to <strong>VC Psychology Explained</strong> — your application has been received.</p>
-    <p>
-      <strong>Date:</strong> Wednesday, September 16<br>
-      <strong>Venue:</strong> The Startup Kitchen, Sheikh Zayed<br>
-      <strong>Your preferred slot:</strong> ${escapeHtml(preferredSlot)}
-    </p>
-    <p>The exact location and confirmed time will be shared shortly.</p>
-    <p>— Common Ground x Silicon Badia</p>
-  `;
-  const promise = sendEmail(env, { to: email, subject: "You're confirmed — VC Psychology Explained", text, html });
+function sendApplyReceived(env, ctx, { email, fullName }) {
+  const { subject, html, text } = renderApplyReceivedEmail({ fullName });
+  const promise = sendEmail(env, { to: email, subject, text, html });
+  if (ctx && ctx.waitUntil) ctx.waitUntil(promise);
+  return promise;
+}
+
+function sendApplyAccepted(env, ctx, { email, fullName, preferredSlot }) {
+  const { subject, html, text } = renderApplyAcceptedEmail({ fullName, preferredSlot, venue: EVENT_VENUE });
+  const promise = sendEmail(env, { to: email, subject, text, html });
   if (ctx && ctx.waitUntil) ctx.waitUntil(promise);
   return promise;
 }
@@ -168,7 +146,7 @@ async function handleApply(request, env, ctx) {
     return json({ success: false, message: "Could not save your application. Please try again." }, { status: 500 });
   }
 
-  sendApplyConfirmation(env, ctx, { email, fullName, preferredSlot });
+  sendApplyReceived(env, ctx, { email, fullName });
 
   return json({ success: true });
 }
@@ -245,7 +223,7 @@ async function handleApplicationsList(request, env) {
   return json({ success: true, applications });
 }
 
-async function handleApplicationPatch(request, env, id) {
+async function handleApplicationPatch(request, env, ctx, id) {
   const adminId = await requireAuth(request, env);
   if (!adminId) return json({ success: false, message: "Unauthorized." }, { status: 401 });
 
@@ -264,7 +242,21 @@ async function handleApplicationPatch(request, env, id) {
     return json({ success: false, message: "Invalid status." }, { status: 400 });
   }
 
+  const existing = await env.DB.prepare(
+    "SELECT full_name, email, preferred_slot, status FROM applications WHERE id = ?"
+  )
+    .bind(numericId)
+    .first();
+
   await env.DB.prepare("UPDATE applications SET status = ? WHERE id = ?").bind(status, numericId).run();
+
+  if (existing && status === "accepted" && existing.status !== "accepted") {
+    sendApplyAccepted(env, ctx, {
+      email: existing.email,
+      fullName: existing.full_name,
+      preferredSlot: existing.preferred_slot,
+    });
+  }
 
   return json({ success: true });
 }
@@ -285,7 +277,7 @@ export default {
       if (pathname === "/api/applications" && method === "GET") return await handleApplicationsList(request, env);
 
       const appMatch = pathname.match(/^\/api\/applications\/([^/]+)$/);
-      if (appMatch && method === "PATCH") return await handleApplicationPatch(request, env, appMatch[1]);
+      if (appMatch && method === "PATCH") return await handleApplicationPatch(request, env, ctx, appMatch[1]);
     } catch (e) {
       return json({ success: false, message: "Server error." }, { status: 500 });
     }
