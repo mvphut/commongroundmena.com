@@ -211,7 +211,7 @@
           <option value="declined">Declined</option>
         </select>
         <select id="app-slot-filter">
-          <option value="">All slots</option>
+          <option value="">All original slots</option>
           <option value="12:00 PM">12:00 PM</option>
           <option value="2:00 PM">2:00 PM</option>
           <option value="5:00 PM">5:00 PM</option>
@@ -222,7 +222,7 @@
         <table>
           <thead>
             <tr>
-              <th>Name</th><th>Contact</th><th>Role</th><th>Slot</th><th>Startup</th>
+              <th>Name</th><th>Contact</th><th>Role</th><th title="Slot picked before the event moved to a single 12:00 PM session. New applications are stored as 12:00 PM.">Original slot</th><th>Startup</th>
               <th>Interests</th><th>Status</th><th>Applied</th>
             </tr>
           </thead>
@@ -269,6 +269,8 @@
     waitlist: 'Waitlist',
     declined: 'Declined'
   };
+
+  var EVENT_TIME = '12:00 PM';
 
   var applications = [];
   var signups = [];
@@ -446,7 +448,10 @@
         '<td>' + escapeHtml(a.full_name) + '</td>' +
         '<td><div>' + escapeHtml(a.email) + '</div><div class="cell-muted">' + escapeHtml(a.mobile) + '</div></td>' +
         '<td>' + escapeHtml(a.current_role) + '</td>' +
-        '<td>' + escapeHtml(a.preferred_slot) + '</td>' +
+        // Everyone attends at 12:00 PM now; only a different original pick needs attention.
+        (a.preferred_slot && a.preferred_slot !== EVENT_TIME
+          ? '<td>' + escapeHtml(a.preferred_slot) + '</td>'
+          : '<td class="cell-muted">' + escapeHtml(a.preferred_slot) + '</td>') +
         '<td>' + (a.startup_name ? '<div>' + escapeHtml(a.startup_name) + '</div><div class="cell-muted">' + escapeHtml(a.one_liner) + '</div>' : '<span class="cell-muted">—</span>') + '</td>' +
         '<td><div class="chips">' + (chips || '<span class="cell-muted">—</span>') + '</div></td>' +
         '<td><select class="status-select" data-id="' + a.id + '">' + statusOptions + '</select></td>' +

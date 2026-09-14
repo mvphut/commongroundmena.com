@@ -141,8 +141,8 @@ export function renderApplyReceivedEmail({ fullName }) {
     <p style="margin:0 0 16px; font-size:18px; font-weight:bold;">We got your application.</p>
     <p style="margin:0 0 16px;">${greeting}</p>
     <p style="margin:0 0 16px;">Thanks for applying to <strong>VC Psychology Explained</strong>, hosted by Common Ground x #WTFtv.</p>
-    <p style="margin:0 0 16px;">This confirms we've received your application — it does not yet confirm your spot. Slots are limited, and we're reviewing applications on a rolling basis.</p>
-    <p style="margin:0 0 16px;">We'll follow up shortly with your status and, if confirmed, your exact slot and venue details.</p>
+    <p style="margin:0 0 16px;">This confirms we've received your application. It does not yet confirm your spot. Slots are limited, and we're reviewing applications on a rolling basis.</p>
+    <p style="margin:0 0 16px;">We'll follow up shortly with your status and, if confirmed, the full event details.</p>
     ${sponsorsBlock()}
     <p style="margin:12px 0 0; color:#6b6255;">Thank you for your patience,<br>Common Ground x #WTFtv</p>
   `;
@@ -158,32 +158,41 @@ export function renderApplyReceivedEmail({ fullName }) {
     "",
     "Thanks for applying to VC Psychology Explained, hosted by Common Ground x #WTFtv.",
     "",
-    "This confirms we've received your application — it does not yet confirm your spot. Slots are limited, and we're reviewing applications on a rolling basis.",
+    "This confirms we've received your application. It does not yet confirm your spot. Slots are limited, and we're reviewing applications on a rolling basis.",
     "",
-    "We'll follow up shortly with your status and, if confirmed, your exact slot and venue details.",
+    "We'll follow up shortly with your status and, if confirmed, the full event details.",
     "",
     "Sponsors: MINT by EGBANK",
     "",
     "Thank you for your patience,",
     "Common Ground x #WTFtv",
   ].join("\n");
-  return { subject: "We got your application — VC Psychology Explained", html, text };
+  return { subject: "We got your application: VC Psychology Explained", html, text };
 }
 
-export function renderApplyAcceptedEmail({ fullName, preferredSlot, venue }) {
+export function renderApplyAcceptedEmail({ fullName, time, venue }) {
   const greeting = fullName ? `Hi ${escapeHtml(fullName)},` : "Hi,";
   const greetingText = fullName ? `Hi ${fullName},` : "Hi,";
+  const timeChangeNotice = (t) =>
+    `Please note: due to availability and scheduling constraints, this session will now take place at ${t}, regardless of the time slot you originally selected. We appreciate your understanding, if this new time doesn't work for you, please reply as soon as possible so we can offer your spot to someone else.`;
   const bodyHtml = `
     <p style="margin:0 0 16px; font-size:18px; font-weight:bold;">You're confirmed.</p>
     <p style="margin:0 0 16px;">${greeting}</p>
-    <p style="margin:0 0 16px;">Good news — you're confirmed for <strong>VC Psychology Explained</strong>, hosted by Common Ground x #WTFtv.</p>
+    <p style="margin:0 0 16px;">Good news: you're confirmed for <strong>VC Psychology Explained</strong>, hosted by Common Ground x #WTFtv.</p>
     <table role="presentation" cellpadding="0" cellspacing="0" style="width:100%; margin: 8px 0 16px; border-collapse:collapse;">
       <tr><td style="padding:6px 0; color:#6b6255; width:110px; vertical-align:top;">Date</td><td style="padding:6px 0; font-weight:bold;">Wednesday, September 16</td></tr>
-      <tr><td style="padding:6px 0; color:#6b6255; vertical-align:top;">Time</td><td style="padding:6px 0; font-weight:bold;">${escapeHtml(preferredSlot)}</td></tr>
+      <tr><td style="padding:6px 0; color:#6b6255; vertical-align:top;">Time</td><td style="padding:6px 0; font-weight:bold;">${escapeHtml(time)}</td></tr>
       <tr><td style="padding:6px 0; color:#6b6255; vertical-align:top;">Venue</td><td style="padding:6px 0; font-weight:bold;">${escapeHtml(venue)}<br><a href="${MAPS_URL}" style="color:#5a7a54; font-size:13px; font-weight:normal;">Get directions ↗</a></td></tr>
       <tr><td style="padding:6px 0; color:#6b6255; vertical-align:top;">Speaker</td><td style="padding:6px 0; font-weight:bold;">Hossam Shafick<br><span style="font-weight:normal; color:#6b6255; font-size:13px;">Partner - Silicon Badia</span></td></tr>
     </table>
-    <p style="margin:0 0 4px;">Please arrive 10 minutes early. If your slot no longer works for you, reply as soon as possible so we can offer it to someone else.</p>
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin: 0 0 18px; border-collapse:separate;">
+      <tr>
+        <td style="padding:14px 16px; background-color:${PAPER}; border-left:3px solid ${ACCENT}; border-radius:0 8px 8px 0; font-family: Helvetica, Arial, sans-serif; font-size:14px; line-height:1.6; color:${INK};">
+          ${timeChangeNotice(`<strong style="font-size:15px;">${escapeHtml(time)}</strong>`)}
+        </td>
+      </tr>
+    </table>
+    <p style="margin:0 0 4px;">Please arrive 10 minutes early.</p>
     ${button(`${SITE_URL}/vc-psychology`, "View event details")}
     ${sponsorsBlock()}
     <p style="margin:12px 0 0; color:#6b6255;">See you there,<br>Common Ground x #WTFtv</p>
@@ -198,20 +207,22 @@ export function renderApplyAcceptedEmail({ fullName, preferredSlot, venue }) {
     "",
     greetingText,
     "",
-    "Good news — you're confirmed for VC Psychology Explained, hosted by Common Ground x #WTFtv.",
+    "Good news: you're confirmed for VC Psychology Explained, hosted by Common Ground x #WTFtv.",
     "",
     "Date: Wednesday, September 16",
-    `Time: ${preferredSlot}`,
+    `Time: ${time}`,
     `Venue: ${venue}`,
     `Get directions: ${MAPS_URL}`,
     "Speaker: Hossam Shafick, Partner - Silicon Badia",
     "",
-    "Please arrive 10 minutes early. If your slot no longer works for you, reply as soon as possible so we can offer it to someone else.",
+    timeChangeNotice(time),
+    "",
+    "Please arrive 10 minutes early.",
     "",
     "Sponsors: MINT by EGBANK",
     "",
     "See you there,",
     "Common Ground x #WTFtv",
   ].join("\n");
-  return { subject: "You're confirmed — VC Psychology Explained, Sept 16", html, text };
+  return { subject: "You're confirmed: VC Psychology Explained, Sept 16", html, text };
 }

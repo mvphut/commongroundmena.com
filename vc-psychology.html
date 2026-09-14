@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>VC Psychology Explained | Common Ground</title>
-<meta name="description" content="VC psychology explained, and how to use that to your advantage. With Hossam Shafick. A Common Ground × #WTFtv workshop, powered by The Startup Kitchen — Sheikh Zayed, September 16.">
+<meta name="description" content="VC psychology explained, and how to use that to your advantage. With Hossam Shafick. A Common Ground × #WTFtv workshop, powered by The Startup Kitchen. Sheikh Zayed, September 16.">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://commongroundmena.com/vc-psychology">
 <link rel="icon" href="/favicon.ico" sizes="any">
@@ -14,14 +14,14 @@
 
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Common Ground">
-<meta property="og:title" content="VC Psychology Explained — Common Ground × #WTFtv">
+<meta property="og:title" content="VC Psychology Explained | Common Ground × #WTFtv">
 <meta property="og:description" content="And how to use that to your advantage. With Hossam Shafick · The Startup Kitchen, Sheikh Zayed · September 16.">
 <meta property="og:url" content="https://commongroundmena.com/vc-psychology">
 <meta property="og:image" content="https://commongroundmena.com/og-image.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="VC Psychology Explained — Common Ground × #WTFtv">
+<meta name="twitter:title" content="VC Psychology Explained | Common Ground × #WTFtv">
 <meta name="twitter:description" content="And how to use that to your advantage. With Hossam Shafick · The Startup Kitchen, Sheikh Zayed · September 16.">
 <meta name="twitter:image" content="https://commongroundmena.com/og-image.png">
 
@@ -106,16 +106,8 @@
     color: var(--paper-dim);
     margin: 28px 0 0;
   }
-
-  .eyebrow-sub {
-    text-align: center;
-    font-family: 'SuisseIntl Light', sans-serif;
-    font-weight: 300;
-    font-size: 12px;
-    letter-spacing: 0.02em;
-    color: var(--paper-faint);
-    margin: 6px 0 0;
-  }
+  /* Brand casing: the "tv" in WTFtv stays lowercase inside uppercase labels. */
+  .brand-tv { text-transform: none; }
 
   h1 {
     text-align: center;
@@ -141,6 +133,30 @@
     margin: 22px 0 0;
   }
   .byline strong { color: var(--paper-dim); font-weight: 500; }
+
+  .about {
+    max-width: 46ch;
+    margin: 48px auto 0;
+    padding-top: 36px;
+    border-top: 1px solid var(--line);
+    text-align: center;
+  }
+  .about .eyebrow { margin: 0 0 20px; }
+  .about p {
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--paper-dim);
+    margin: 0 0 14px;
+    text-wrap: pretty;
+  }
+  .about .payoff {
+    margin: 26px 0 0;
+    font-size: clamp(18px, 3vw, 21px);
+    line-height: 1.4;
+    color: var(--paper);
+    text-wrap: balance;
+  }
+  .about .payoff .key { color: var(--accent); }
 
   .details {
     margin: 40px 0 0;
@@ -258,28 +274,6 @@
   input:focus, textarea:focus { border-color: var(--accent); }
   textarea { resize: vertical; min-height: 76px; line-height: 1.5; }
 
-  .slot-options {
-    display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
-  }
-  .slot-options input { position: absolute; opacity: 0; pointer-events: none; }
-  .slot-options label {
-    cursor: pointer;
-    border: 1px solid var(--line);
-    border-radius: 999px;
-    padding: 10px 20px;
-    font-size: 14px;
-    color: var(--paper-dim);
-    transition: border-color 180ms ease, background 180ms ease, color 180ms ease;
-  }
-  .slot-options input:checked + label {
-    border-color: var(--accent);
-    background: var(--accent-soft);
-    color: var(--paper);
-  }
-  .slot-options label:hover { border-color: var(--accent); }
-
   .chip-grid {
     display: flex;
     flex-wrap: wrap;
@@ -385,11 +379,19 @@
 </header>
 
 <main>
-  <p class="eyebrow">Common Ground × #WTFtv</p>
-  <p class="eyebrow-sub">What They Failed to Teach in Venture</p>
+  <p class="eyebrow">Common Ground × #WTF<span class="brand-tv">tv</span></p>
   <h1>VC Psychology Explained</h1>
   <p class="subhead">And how to use that to your advantage.</p>
   <p class="byline">By <strong>Hossam Shafick</strong><br>Partner - Silicon Badia</p>
+
+  <section class="about" aria-labelledby="about-wtftv">
+    <h2 class="eyebrow" id="about-wtftv">About WTF<span class="brand-tv">tv</span></h2>
+    <p>Venture is broken.</p>
+    <p>Founders are expected to master valuation, fundraising, dilution and negotiation, all while actually building great companies.</p>
+    <p>Breaking into VC, meanwhile, still depends solely on access to closed networks and knowledge you only get once you're already inside.</p>
+    <p>WTFtv was born to fix that.</p>
+    <p class="payoff"><span class="key">WTFtv =</span> What They Failed to Teach in Venture.</p>
+  </section>
 
   <div class="details">
     <div class="cell">
@@ -401,8 +403,8 @@
       <p class="value">The Startup Kitchen, Sheikh Zayed<span class="value sub"><a href="https://maps.app.goo.gl/otQvsgbVZnN6SUjN9" target="_blank" rel="noopener">Get directions ↗</a></span></p>
     </div>
     <div class="cell">
-      <p class="label">Tentative slots</p>
-      <p class="value">12:00 PM · 2:00 PM · 5:00 PM</p>
+      <p class="label">Time</p>
+      <p class="value">12:00 PM</p>
     </div>
   </div>
 
@@ -436,19 +438,7 @@
     </section>
 
     <section>
-      <div class="section-head"><span class="num">02</span><h2>Preferred slot</h2></div>
-      <div class="slot-options" role="radiogroup" aria-label="Preferred time slot">
-        <input type="radio" id="slot-12" name="preferred_slot" value="12:00 PM" required />
-        <label for="slot-12">12:00 PM</label>
-        <input type="radio" id="slot-2" name="preferred_slot" value="2:00 PM" />
-        <label for="slot-2">2:00 PM</label>
-        <input type="radio" id="slot-5" name="preferred_slot" value="5:00 PM" />
-        <label for="slot-5">5:00 PM</label>
-      </div>
-    </section>
-
-    <section>
-      <div class="section-head"><span class="num">03</span><h2>Your startup</h2><span class="hint">If any</span></div>
+      <div class="section-head"><span class="num">02</span><h2>Your startup</h2><span class="hint">If any</span></div>
       <div class="field-grid">
         <div>
           <label class="field-label" for="startup_name">Startup name</label>
@@ -462,7 +452,7 @@
     </section>
 
     <section>
-      <div class="section-head"><span class="num">04</span><h2>What you're looking for</h2></div>
+      <div class="section-head"><span class="num">03</span><h2>What you're looking for</h2></div>
       <label class="field-label" style="margin-bottom:12px;">Fields of interest</label>
       <div class="chip-grid">
         <input type="checkbox" id="int-1" name="interests[]" value="Fintech" /><label for="int-1">Fintech</label>
@@ -517,13 +507,6 @@
     form.addEventListener('submit', function (e) {
       e.preventDefault();
 
-      var slotChecked = form.querySelector('input[name="preferred_slot"]:checked');
-      if (!slotChecked) {
-        status.textContent = 'Please choose a preferred time slot.';
-        status.className = 'form-status is-error';
-        return;
-      }
-
       submitBtn.disabled = true;
       status.textContent = 'Sending…';
       status.className = 'form-status';
@@ -536,18 +519,18 @@
         .then(function (res) { return res.json(); })
         .then(function (data) {
           if (data.success) {
-            status.textContent = "You're in — we'll follow up by email with the confirmed time and location.";
+            status.textContent = "You're in. We'll follow up by email to confirm your spot.";
             status.className = 'form-status is-success';
             form.reset();
             submitBtn.disabled = true;
           } else {
-            status.textContent = data.message || 'Something went wrong — please try again.';
+            status.textContent = data.message || 'Something went wrong. Please try again.';
             status.className = 'form-status is-error';
             submitBtn.disabled = false;
           }
         })
         .catch(function () {
-          status.textContent = 'Something went wrong — please try again.';
+          status.textContent = 'Something went wrong. Please try again.';
           status.className = 'form-status is-error';
           submitBtn.disabled = false;
         });

@@ -17,6 +17,9 @@ const VALID_STATUSES = ["awaiting_review", "accepted", "waitlist", "declined"];
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const FROM_ADDRESS = "Common Ground <hello@commongroundmena.com>";
 const EVENT_VENUE = "The Startup Kitchen, Sheikh Zayed";
+// Single session. Still written to applications.preferred_slot so new rows stay
+// comparable with older ones, which carry the slot the applicant picked.
+const EVENT_TIME = "12:00 PM";
 
 async function sendEmail(env, { to, subject, text, html }) {
   if (!env.RESEND_API_KEY) return;
@@ -48,8 +51,8 @@ function sendApplyReceived(env, ctx, { email, fullName }) {
   return promise;
 }
 
-function sendApplyAccepted(env, ctx, { email, fullName, preferredSlot }) {
-  const { subject, html, text } = renderApplyAcceptedEmail({ fullName, preferredSlot, venue: EVENT_VENUE });
+function sendApplyAccepted(env, ctx, { email, fullName }) {
+  const { subject, html, text } = renderApplyAcceptedEmail({ fullName, time: EVENT_TIME, venue: EVENT_VENUE });
   const promise = sendEmail(env, { to: email, subject, text, html });
   if (ctx && ctx.waitUntil) ctx.waitUntil(promise);
   return promise;
@@ -116,10 +119,9 @@ async function handleApply(request, env, ctx) {
 
   const fullName = (body.full_name || "").toString().trim();
   const email = (body.email || "").toString().trim();
-  const preferredSlot = (body.preferred_slot || "").toString().trim();
 
-  if (!fullName || !EMAIL_PATTERN.test(email) || !preferredSlot) {
-    return json({ success: false, message: "Please fill in your name, a valid email, and a preferred slot." }, { status: 400 });
+  if (!fullName || !EMAIL_PATTERN.test(email)) {
+    return json({ success: false, message: "Please fill in your name and a valid email." }, { status: 400 });
   }
 
   const interests = Array.isArray(body.interests) ? body.interests : (body.interests ? [body.interests] : []);
@@ -135,7 +137,7 @@ async function handleApply(request, env, ctx) {
         (body.mobile || "").toString().trim(),
         email,
         (body.current_role || "").toString().trim(),
-        preferredSlot,
+        EVENT_TIME,
         (body.startup_name || "").toString().trim(),
         (body.one_liner || "").toString().trim(),
         JSON.stringify(interests),
@@ -243,7 +245,7 @@ async function handleApplicationPatch(request, env, ctx, id) {
   }
 
   const existing = await env.DB.prepare(
-    "SELECT full_name, email, preferred_slot, status FROM applications WHERE id = ?"
+    "SELECT full_name, email, status FROM applications WHERE id = ?"
   )
     .bind(numericId)
     .first();
@@ -254,7 +256,6 @@ async function handleApplicationPatch(request, env, ctx, id) {
     sendApplyAccepted(env, ctx, {
       email: existing.email,
       fullName: existing.full_name,
-      preferredSlot: existing.preferred_slot,
     });
   }
 
